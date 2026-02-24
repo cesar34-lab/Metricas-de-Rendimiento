@@ -2,7 +2,7 @@
 
 ## Detección de bordeado simple mediante GPUs y CUDA
 
-**Autor:**\ cesar mora- Johan Garcia 
+**Autor: cesar mora- Johan Garcia **\
 **Universidad Sergio Arboleda**\
 **Fecha:** 02/2026
 
