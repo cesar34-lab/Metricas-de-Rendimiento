@@ -1,0 +1,149 @@
+# Taller Práctico 1
+
+## Detección de bordeado simple mediante GPUs y CUDA
+
+**Autor:**\ cesar mora- Johan Garcia 
+**Universidad Sergio Arboleda**\
+**Fecha:** 02/2026
+
+------------------------------------------------------------------------
+
+# 1. Título y Objetivos
+
+## Título
+
+Detección de bordeado simple mediante implementación secuencial en CPU y
+paralela en GPU utilizando CUDA.
+
+## Objetivo del laboratorio
+
+Implementar y comparar la eficiencia de un algoritmo secuencial en CPU y
+uno paralelo en GPU al procesar una imagen, demostrando el *speedup*
+(aceleración) logrado mediante el paralelismo.
+
+------------------------------------------------------------------------
+
+# 2. Marco Teórico
+
+La detección de bordes es un algoritmo clásico del procesamiento de
+imágenes. Un borde representa una transición rápida en la intensidad o
+color de la imagen.
+
+Matemáticamente, los bordes se detectan mediante la segunda derivada
+espacial de la intensidad.
+
+Kernel típico Laplace 3x3:
+
+    [ 0   1   0 ]
+    [ 1  -4   1 ]
+    [ 0   1   0 ]
+
+Funcionamiento:
+
+1.  El valor central (-4) se compara con los vecinos inmediatos.
+2.  En regiones uniformes, la suma tiende a cero.
+3.  En transiciones bruscas, el resultado es un valor extremo (positivo
+    o negativo).
+4.  Las regiones homogéneas se vuelven oscuras y los bordes se resaltan
+    como líneas brillantes.
+
+Para este laboratorio, el procedimiento puede simplificarse verificando
+cada píxel y, según la suma de sus componentes RGB, convertirlo a negro
+(0) o blanco (255), generando un contorno aproximado.
+
+------------------------------------------------------------------------
+
+# 3. Metodología
+
+## Configuración del Hardware
+
+### CPU
+
+-   Procesador: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+-   Núcleos: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+-   Memoria RAM: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+### GPU
+
+-   GPU NVIDIA compatible con CUDA
+-   Entorno de ejecución con aceleración GPU habilitada
+
+------------------------------------------------------------------------
+
+## Configuración del Software
+
+-   Python 3.x
+-   Numba
+-   OpenCV
+-   NumPy
+
+------------------------------------------------------------------------
+
+## Algoritmos desarrollados
+
+### Algoritmo Secuencial (CPU)
+
+Entrada: - Imagen NxM en formato RGB
+
+Proceso: - Conversión a escala de grises (si aplica). - Recorrido píxel
+por píxel. - Aplicación del procedimiento definido (kernel Laplaciano o
+threshold simplificado). - Generación de imagen en blanco y negro.
+
+Salida: - Imagen NxM en blanco y negro con contorno aproximado.
+
+------------------------------------------------------------------------
+
+### Algoritmo Paralelo (GPU - CUDA)
+
+Entrada: - Imagen NxM en formato RGB
+
+Proceso: - Transferencia de la imagen a memoria GPU. - Asignación de un
+hilo por píxel. - Aplicación del procedimiento en paralelo. - Copia del
+resultado a CPU.
+
+Salida: - Imagen NxM en blanco y negro.
+
+------------------------------------------------------------------------
+
+# 4. Resultados
+
+Se ejecutaron ambos algoritmos utilizando la misma imagen de entrada.
+
+  Implementación   Tiempo de ejecución
+  ---------------- -----------------------
+  CPU              \_\_\_\_\_\_ segundos
+  GPU              \_\_\_\_\_\_ segundos
+
+Las imágenes obtenidas fueron visualmente equivalentes.
+
+------------------------------------------------------------------------
+
+# 5. Análisis de Rendimiento
+
+El speedup se calcula como:
+
+Speedup = T_CPU / T_GPU
+
+Análisis:
+
+-   La GPU reduce significativamente el tiempo de ejecución en imágenes
+    grandes.
+-   El procesamiento paralelo permite ejecutar múltiples operaciones
+    simultáneamente.
+-   El beneficio del paralelismo aumenta conforme crece el tamaño de la
+    imagen.
+-   En imágenes pequeñas, el costo de transferencia puede reducir la
+    ganancia.
+
+------------------------------------------------------------------------
+
+# 6. Conclusiones
+
+-   El procesamiento de imágenes es un problema naturalmente
+    paralelizable.
+-   La GPU demuestra mayor eficiencia frente a la CPU en tareas de
+    procesamiento masivo de datos.
+-   El laboratorio permitió observar de manera práctica el impacto del
+    paralelismo.
+-   El speedup obtenido valida la ventaja del uso de GPUs para este tipo
+    de aplicaciones.
