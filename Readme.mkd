@@ -1,7 +1,7 @@
 # Taller Práctico 1 — Filtros de Imágenes con CUDA
 
 **Autor:**
-Cesar Mora
+Cesar Mora  
 Johan Garcia
 **Asignatura:**
 Metricas de Rendimiento
@@ -250,4 +250,5 @@ Este tipo de técnicas es ampliamente utilizado en:
 * NVIDIA CUDA Programming Guide
 * OpenCV Documentation
 * Numba CUDA Documentation
+
 
