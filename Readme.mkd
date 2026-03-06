@@ -1,0 +1,252 @@
+# Taller Práctico 1 — Filtros de Imágenes con CUDA
+
+**Autor:**
+Guillermo Andrés De Mendoza Corrales
+
+**Asignatura:**
+Computación con GPU
+
+**Institución:**
+Universidad Sergio Arboleda
+
+**Fecha:**
+Febrero 2026
+
+---
+
+# 1. Descripción del Taller
+
+El objetivo de este laboratorio es implementar **cinco algoritmos de procesamiento de imágenes utilizando CUDA** para ejecutar operaciones en **GPU**.
+
+Cada algoritmo se implementa como un **kernel CUDA** que procesa los píxeles de una imagen de manera paralela, aprovechando el modelo de programación **SIMT (Single Instruction Multiple Threads)**.
+
+Los filtros implementados son:
+
+1. Inversión de colores (Negativo)
+2. Blur mediante convolución
+3. Recorte de imagen (ROI)
+4. Binarización mediante umbral
+5. Detección de bordes con Sobel
+
+El desarrollo se realizó en **Google Colab utilizando GPU y CUDA a través de Numba**.
+
+---
+
+# 2. Tecnologías Utilizadas
+
+| Tecnología | Uso                                |
+| ---------- | ---------------------------------- |
+| Python     | Lenguaje principal                 |
+| CUDA       | Computación paralela en GPU        |
+| Numba      | Compilación de kernels CUDA        |
+| OpenCV     | Lectura y manipulación de imágenes |
+| NumPy      | Manipulación de matrices           |
+| Matplotlib | Visualización de resultados        |
+
+---
+
+# 3. Estructura del Proyecto
+
+```
+.
+├── image_filters.ipynb
+├── images
+│   └── imagen.png
+└── README.mkd
+```
+
+Descripción:
+
+| Archivo               | Descripción                                     |
+| --------------------- | ----------------------------------------------- |
+| `image_filters.ipynb` | Notebook con implementación CUDA de los filtros |
+| `images/`             | Carpeta con las imágenes utilizadas             |
+| `README.mkd`          | Documentación del proyecto                      |
+
+---
+
+# 4. Configuración de CUDA
+
+Los kernels CUDA utilizan la siguiente configuración de ejecución:
+
+```
+threads_per_block = (16,16)
+
+blocks_x = ceil(height / 16)
+blocks_y = ceil(width / 16)
+
+blocks_per_grid = (blocks_x, blocks_y)
+```
+
+Cada **hilo procesa un píxel** de la imagen.
+
+---
+
+# 5. Filtros Implementados
+
+## 5.1 Inversión de Colores (Negativo)
+
+La inversión de color es una operación **puntual**, donde cada píxel se transforma de forma independiente.
+
+Para cada canal RGB:
+
+```
+R' = 255 - R
+G' = 255 - G
+B' = 255 - B
+```
+
+Este filtro transforma colores claros en oscuros y viceversa.
+
+---
+
+## 5.2 Blur de Imagen
+
+El desenfoque se implementa mediante una **convolución con un kernel 3x3 promedio**.
+
+Kernel utilizado:
+
+```
+1/9  1/9  1/9
+1/9  1/9  1/9
+1/9  1/9  1/9
+```
+
+El nuevo valor de cada píxel corresponde al promedio de sus vecinos.
+
+Este filtro elimina ruido de alta frecuencia y suaviza la imagen.
+
+---
+
+## 5.3 Recorte de Imagen (ROI)
+
+El recorte extrae una **región rectangular** de la imagen original.
+
+Parámetros necesarios:
+
+```
+(x_start, y_start) → coordenada inicial
+width_crop → ancho del recorte
+height_crop → alto del recorte
+```
+
+Cada hilo copia un píxel desde la imagen original hacia la imagen recortada aplicando un **offset de coordenadas**.
+
+---
+
+## 5.4 Binarización de Imagen
+
+La binarización convierte la imagen en **blanco y negro** utilizando un **umbral T**.
+
+Primero se calcula la intensidad en escala de grises:
+
+```
+gray = (R + G + B) / 3
+```
+
+Luego se aplica la regla:
+
+```
+si gray > T → 255
+si gray ≤ T → 0
+```
+
+Para este taller se utilizó:
+
+```
+T = 128
+```
+
+---
+
+## 5.5 Detección de Bordes con Sobel
+
+El operador Sobel detecta cambios bruscos de intensidad calculando el **gradiente de la imagen**.
+
+Se utilizan dos kernels:
+
+### Gradiente horizontal
+
+```
+-1  0  1
+-2  0  2
+-1  0  1
+```
+
+### Gradiente vertical
+
+```
+-1 -2 -1
+ 0  0  0
+ 1  2  1
+```
+
+Se calcula:
+
+```
+Gx → gradiente horizontal
+Gy → gradiente vertical
+```
+
+La magnitud del borde se obtiene mediante:
+
+```
+G = sqrt(Gx² + Gy²)
+```
+
+Valores altos de **G** indican presencia de bordes.
+
+---
+
+# 6. Flujo de Procesamiento
+
+El pipeline de procesamiento es el siguiente:
+
+1. Cargar imagen con OpenCV
+2. Transferir imagen a memoria GPU
+3. Ejecutar kernels CUDA
+4. Copiar resultados a CPU
+5. Visualizar resultados
+
+---
+
+# 7. Resultados
+
+Se generaron las siguientes imágenes:
+
+* Imagen original
+* Imagen negativa
+* Imagen con blur
+* Imagen binaria
+* Imagen con detección de bordes
+* Imagen recortada
+
+Cada filtro demuestra el uso de **paralelización masiva en GPU para procesamiento de imágenes**.
+
+---
+
+# 8. Conclusiones
+
+El uso de CUDA permite acelerar significativamente el procesamiento de imágenes al distribuir el cálculo entre miles de hilos de GPU.
+
+Los principales aprendizajes del laboratorio fueron:
+
+* Implementación de **kernels CUDA**
+* Uso de **convoluciones en GPU**
+* Gestión de memoria **CPU ↔ GPU**
+* Procesamiento paralelo de matrices
+
+Este tipo de técnicas es ampliamente utilizado en:
+
+* Visión por computador
+* Procesamiento de video
+* Inteligencia artificial
+* Sistemas embebidos con GPU
+
+---
+
+# 9. Referencias
+
+* NVIDIA CUDA Programming Guide
+* OpenCV Documentation
+* Numba CUDA Documentation
