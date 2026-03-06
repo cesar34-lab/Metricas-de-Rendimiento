@@ -46,7 +46,7 @@ El desarrollo se realizó en **Google Colab utilizando GPU y CUDA a través de N
 
 ---
 
-# 4. Configuración de CUDA
+# 3. Configuración de CUDA
 
 Los kernels CUDA utilizan la siguiente configuración de ejecución:
 
@@ -63,9 +63,9 @@ Cada **hilo procesa un píxel** de la imagen.
 
 ---
 
-# 5. Filtros Implementados
+# 4. Filtros Implementados
 
-## 5.1 Inversión de Colores (Negativo)
+## 4.1 Inversión de Colores (Negativo)
 
 La inversión de color es una operación **puntual**, donde cada píxel se transforma de forma independiente.
 
@@ -81,7 +81,7 @@ Este filtro transforma colores claros en oscuros y viceversa.
 
 ---
 
-## 5.2 Blur de Imagen
+## 4.2 Blur de Imagen
 
 El desenfoque se implementa mediante una **convolución con un kernel 3x3 promedio**.
 
@@ -99,7 +99,7 @@ Este filtro elimina ruido de alta frecuencia y suaviza la imagen.
 
 ---
 
-## 5.3 Recorte de Imagen (ROI)
+## 4.3 Recorte de Imagen (ROI)
 
 El recorte extrae una **región rectangular** de la imagen original.
 
@@ -115,7 +115,7 @@ Cada hilo copia un píxel desde la imagen original hacia la imagen recortada apl
 
 ---
 
-## 5.4 Binarización de Imagen
+## 4.4 Binarización de Imagen
 
 La binarización convierte la imagen en **blanco y negro** utilizando un **umbral T**.
 
@@ -140,7 +140,7 @@ T = 128
 
 ---
 
-## 5.5 Detección de Bordes con Sobel
+## 4.5 Detección de Bordes con Sobel
 
 El operador Sobel detecta cambios bruscos de intensidad calculando el **gradiente de la imagen**.
 
@@ -179,7 +179,7 @@ Valores altos de **G** indican presencia de bordes.
 
 ---
 
-# 6. Flujo de Procesamiento
+# 5. Flujo de Procesamiento
 
 El pipeline de procesamiento es el siguiente:
 
@@ -191,7 +191,7 @@ El pipeline de procesamiento es el siguiente:
 
 ---
 
-# 7. Resultados
+# 6. Resultados
 
 Se generaron las siguientes imágenes:
 
@@ -206,7 +206,7 @@ Cada filtro demuestra el uso de **paralelización masiva en GPU para procesamien
 
 ---
 
-# 8. Conclusiones
+# 7. Conclusiones
 
 El uso de CUDA permite acelerar significativamente el procesamiento de imágenes al distribuir el cálculo entre miles de hilos de GPU.
 
@@ -226,11 +226,12 @@ Este tipo de técnicas es ampliamente utilizado en:
 
 ---
 
-# 9. Referencias
+# 8. Referencias
 
 * NVIDIA CUDA Programming Guide
 * OpenCV Documentation
 * Numba CUDA Documentation
+
 
 
 
